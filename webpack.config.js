@@ -22,6 +22,17 @@ let cssConfig = {
   use: ["css-loader?url=false", { loader: "postcss-loader", options: { plugins: postCSSPlugins } }]
 }
 
+let jsConfig = {
+  test: /\.js$/,
+  exclude: /(node_modules)/,
+  use: {
+    loader: "babel-loader",
+    options: {
+      presets: ["@babel/preset-react", ["@babel/preset-env", { targets: { node: "12" } }]]
+    }
+  }
+}
+
 let config = {
   entry: "./app/assets/scripts/App.js",
   plugins: [
@@ -34,7 +45,7 @@ let config = {
     new HtmlWebpackHarddiskPlugin()
   ],
   module: {
-    rules: [cssConfig]
+    rules: [cssConfig, jsConfig]
   }
 }
 
@@ -57,17 +68,6 @@ if (currentTask == "webpackDev" || currentTask == "dev") {
 }
 
 if (currentTask == "webpackBuild") {
-  config.module.rules.push({
-    test: /\.js$/,
-    exclude: /(node_modules)/,
-    use: {
-      loader: "babel-loader",
-      options: {
-        presets: ["@babel/preset-react", ["@babel/preset-env", { targets: { node: "12" } }]]
-      }
-    }
-  })
-
   cssConfig.use.unshift(MiniCssExtractPlugin.loader)
   postCSSPlugins.push(require("cssnano"))
   config.output = {
