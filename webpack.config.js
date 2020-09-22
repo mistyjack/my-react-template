@@ -13,6 +13,12 @@ class RunAfterCompile {
   apply(compiler) {
     compiler.hooks.done.tap("Copy images", function () {
       fse.copySync("./app/assets/images", "./docs/assets/images")
+      /*
+        If you needed to copy another file or folder
+        such as your "images" folder, you could just
+        call fse.copySync() as many times as you need
+        to here to cover all of your files/folders.
+      */
     })
   }
 }
@@ -33,6 +39,13 @@ let jsConfig = {
   }
 }
 
+let imgConfig = {
+  test: /\.(png|jpe?g|gif)$/i,
+  use: {
+    loader: "file-loader"
+  }
+}
+
 let config = {
   entry: "./app/assets/scripts/App.js",
   plugins: [
@@ -45,7 +58,7 @@ let config = {
     new HtmlWebpackHarddiskPlugin()
   ],
   module: {
-    rules: [cssConfig, jsConfig]
+    rules: [cssConfig, jsConfig, imgConfig]
   }
 }
 
@@ -62,7 +75,8 @@ if (currentTask == "webpackDev" || currentTask == "dev") {
     contentBase: path.join(__dirname, "app"),
     hot: true,
     port: 3000,
-    host: "0.0.0.0"
+    host: "0.0.0.0",
+    historyApiFallback: { index: "index.html" }
   }
   config.mode = "development"
 }
@@ -73,7 +87,7 @@ if (currentTask == "webpackBuild") {
   config.output = {
     filename: "[name].[chunkhash].js",
     chunkFilename: "[name].[chunkhash].js",
-    path: path.resolve(__dirname, "docs")
+    path: path.resolve(__dirname, "dist")
   }
   config.mode = "production"
   config.optimization = {
