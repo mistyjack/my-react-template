@@ -5,6 +5,7 @@ import fs from "fs"
 //import Header from "./app/components/Header"
 import { StaticRouter as Router } from "react-router-dom"
 import StateContext from "./app/assets/scripts/StateContext"
+import LoadingDotsIcon from "./app/assets/scripts/components/LoadingDotsIcon"
 
 function Shell() {
   return (
@@ -12,7 +13,7 @@ function Shell() {
       <Router>
         {/* <Header staticEmpty={true} /> */}
         <div className="py-5 my-5 text-center">
-          <h1>Loading...</h1>
+          <LoadingDotsIcon />
         </div>
         {/* <Footer /> */}
       </Router>
@@ -28,6 +29,9 @@ function html(x) {
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta http-equiv="X-UA-Compatible" content="ie=edge" />
       <title>Document</title>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet"> 
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+      <script src="https://kit.fontawesome.com/45e7ffc89f.js" crossorigin="anonymous"></script>
   
     </head>
     <body>

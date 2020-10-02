@@ -12,13 +12,7 @@ const postCSSPlugins = [require("postcss-import"), require("postcss-mixins"), re
 class RunAfterCompile {
   apply(compiler) {
     compiler.hooks.done.tap("Copy images", function () {
-      fse.copySync("./app/assets/images", "./docs/assets/images")
-      /*
-        If you needed to copy another file or folder
-        such as your "images" folder, you could just
-        call fse.copySync() as many times as you need
-        to here to cover all of your files/folders.
-      */
+      fse.copySync("./app/favicon.ico", "./dist/favicon.ico")
     })
   }
 }
@@ -48,6 +42,11 @@ let imgConfig = {
 
 let config = {
   entry: "./app/assets/scripts/App.js",
+  output: {
+    publicPath: "/",
+    filename: "bundled.js",
+    path: path.resolve(__dirname, "app")
+  },
   plugins: [
     new Dotenv(),
     new HtmlWebpackPlugin({
@@ -64,10 +63,6 @@ let config = {
 
 if (currentTask == "webpackDev" || currentTask == "dev") {
   cssConfig.use.unshift("style-loader")
-  config.output = {
-    filename: "bundled.js",
-    path: path.resolve(__dirname, "app")
-  }
   config.devServer = {
     before: function (app, server) {
       server._watch("./app/**/*.html")
@@ -85,6 +80,7 @@ if (currentTask == "webpackBuild") {
   cssConfig.use.unshift(MiniCssExtractPlugin.loader)
   postCSSPlugins.push(require("cssnano"))
   config.output = {
+    publicPath: "/",
     filename: "[name].[chunkhash].js",
     chunkFilename: "[name].[chunkhash].js",
     path: path.resolve(__dirname, "dist")
