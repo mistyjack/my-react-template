@@ -1,9 +1,7 @@
 const currentTask = process.env.npm_lifecycle_event
 const path = require("path")
-const Dotenv = require("dotenv-webpack")
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-const HtmlWebpackHarddiskPlugin = require("html-webpack-harddisk-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const fse = require("fs-extra")
 
@@ -12,7 +10,7 @@ const postCSSPlugins = [require("postcss-import"), require("postcss-mixins"), re
 class RunAfterCompile {
   apply(compiler) {
     compiler.hooks.done.tap("Copy images", function () {
-      fse.copySync("./app/favicon.ico", "./dist/favicon.ico")
+      fse.copySync("./app/assets/images", "./dist/assets/images")
     })
   }
 }
@@ -48,20 +46,18 @@ let config = {
     path: path.resolve(__dirname, "app")
   },
   plugins: [
-    new Dotenv(),
     new HtmlWebpackPlugin({
       filename: "index.html",
-      template: "app/index-template.html",
+      template: "app/index.html",
       alwaysWriteToDisk: true
-    }),
-    new HtmlWebpackHarddiskPlugin()
+    })
   ],
   module: {
     rules: [cssConfig, jsConfig, imgConfig]
   }
 }
 
-if (currentTask == "webpackDev" || currentTask == "dev") {
+if (currentTask == "dev") {
   cssConfig.use.unshift("style-loader")
   config.devServer = {
     before: function (app, server) {
@@ -76,7 +72,7 @@ if (currentTask == "webpackDev" || currentTask == "dev") {
   config.mode = "development"
 }
 
-if (currentTask == "webpackBuild") {
+if (currentTask == "build") {
   cssConfig.use.unshift(MiniCssExtractPlugin.loader)
   postCSSPlugins.push(require("cssnano"))
   config.output = {

@@ -1,15 +1,16 @@
 import "../styles/styles.css"
-import React, { Suspense, useEffect } from "react"
-import ReactDOM from "react-dom"
 
-import StateContext from "./StateContext"
-import DispatchContext from "./DispatchContext"
+import React, { Suspense } from "react"
+import ReactDOM from "react-dom"
 import { useImmerReducer } from "use-immer"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
 
-// My components
-import LoadingDotsIcon from "./components/LoadingDotsIcon"
-import NotFound from "./components/NotFound"
+// Import components
+import LoadingDotsIcon from "./modules/LoadingDotsIcon"
+import StateContext from "./StateContext"
+import DispatchContext from "./DispatchContext"
+import NotFound from "./modules/NotFound"
+import Test from "./modules/Test"
 
 function App() {
   const initialState = {}
@@ -23,12 +24,12 @@ function App() {
 
   return (
     <StateContext.Provider value={state}>
-      <DispatchContext.Provider>
+      <DispatchContext.Provider value={dispatch}>
         <BrowserRouter>
           <Suspense fallback={<LoadingDotsIcon />}>
             <Switch>
               <Route path="/" exact>
-                <h1>Hello, World</h1>
+                <Test />
               </Route>
               <Route>
                 <NotFound />
@@ -41,8 +42,8 @@ function App() {
   )
 }
 
+ReactDOM.render(<App />, document.getElementById("app"))
+
 if (module.hot) {
   module.hot.accept()
 }
-
-ReactDOM.render(<App />, document.getElementById("app"))
