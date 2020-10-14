@@ -12,7 +12,7 @@ function NotFound(props) {
         <p className="lead text-muted">
           You can always visit the <Link to="/">homepage</Link> to get a fresh start.
         </p>
-        <Link className="btn btn--reverse-danger" to="/">
+        <Link className="btn btn-danger" to="/">
           Home
         </Link>
       </div>
